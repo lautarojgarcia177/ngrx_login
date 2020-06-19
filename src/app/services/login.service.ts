@@ -20,14 +20,19 @@ export class LoginService {
 
   checkLoginCredentials(credentials: any): Observable<boolean> {
     const obs = new Observable<boolean>(suscriber => {
-      if (credentials.username === this.validCredentials.username && credentials.password === this.validCredentials.password) {
-        suscriber.next(true);
+      setTimeout(() => {
+        suscriber.next(this._checkLoginCredentials(credentials));
         suscriber.complete();
-      } else {
-        suscriber.next(false);
-        suscriber.complete();
-      }
+      }, 1500);
     });
     return obs;
+  }
+
+  _checkLoginCredentials(credentials: any): boolean {
+    if (credentials.username === this.validCredentials.username && credentials.password === this.validCredentials.password) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

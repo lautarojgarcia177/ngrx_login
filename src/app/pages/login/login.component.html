@@ -1,5 +1,5 @@
 <div class="container mx-auto">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form *ngIf="!isLoading" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" class="form-control" id="username" formControlName="username" required>
@@ -9,5 +9,12 @@
           <input type="password" class="form-control" id="password" formControlName="password" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
-    </form>    
+    </form>
+    <div *ngIf="isLoading" class="row">
+      <div class="col text-center mx-auto">
+        <div class="spinner-border text-primary text-center" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
 </div>

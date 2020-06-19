@@ -22,7 +22,7 @@ export const authReducer = (state = initialAuthState, action: fromAuthActions.Au
   switch (action.type) {
 
     case fromAuthActions.EAuthActions.LOGIN:
-        return state = {...state}
+        return state = Object.assign(state, action.payload);
 
     default:
       return state;

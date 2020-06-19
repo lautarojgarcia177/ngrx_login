@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+  isLoading = false;
+
   loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required]
@@ -29,10 +31,10 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     // const action = new fromAuthActions.Login(this.loginForm.value);
     // this.store.dispatch(action);
+    this.isLoading = true;
     this.login.checkLoginCredentials(this.loginForm.value).subscribe(res => {
-      console.log(res);
       if (res === true) {
-        console.log('credentials valid');
+        this.isLoading = false;
         this.router.navigate(['home']);
       }
     });
