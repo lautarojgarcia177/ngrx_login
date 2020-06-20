@@ -1,24 +1,25 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
+import {UserCredentials} from 'src/app/models/user-credentials.model';
 
-interface LoginCredentials {
-  username: string;
-  password: string;
-}
+// interface LoginCredentials {
+//   username: string;
+//   password: string;
+// }
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class AuthService {
 
-  private validCredentials: LoginCredentials = {
+  private validCredentials: UserCredentials = {
     username: 'lautaro',
     password: 'garcia'
   };
 
   constructor() { }
 
-  checkLoginCredentials(credentials: any): Observable<boolean> {
+  public checkLoginCredentials(credentials: UserCredentials): Observable<boolean> {
     const obs = new Observable<boolean>(suscriber => {
       setTimeout(() => {
         suscriber.next(this._checkLoginCredentials(credentials));
@@ -28,7 +29,7 @@ export class LoginService {
     return obs;
   }
 
-  _checkLoginCredentials(credentials: any): boolean {
+  private _checkLoginCredentials(credentials: UserCredentials): boolean {
     if (credentials.username === this.validCredentials.username && credentials.password === this.validCredentials.password) {
       return true;
     } else {

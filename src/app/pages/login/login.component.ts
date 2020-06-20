@@ -1,4 +1,5 @@
-import { LoginService } from './../../services/login.service';
+import { UserCredentials } from './../../models/user-credentials.model';
+import { AuthService } from '../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit {
     password: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder, private store: Store<IAuthState>, private login: LoginService, private router: Router) {
+  constructor(private fb: FormBuilder, private store: Store<IAuthState>, private login: AuthService, private router: Router) {
 
   }
 
@@ -29,15 +30,16 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    // const action = new fromAuthActions.Login(this.loginForm.value);
-    // this.store.dispatch(action);
-    this.isLoading = true;
-    this.login.checkLoginCredentials(this.loginForm.value).subscribe(res => {
-      if (res === true) {
-        this.isLoading = false;
-        this.router.navigate(['home']);
-      }
-    });
+    const credentials: UserCredentials = this.loginForm.value;
+    const action = new fromAuthActions.Login(credentials);
+    this.store.dispatch(action);
+    // this.isLoading = true;
+    // this.login.checkLoginCredentials(this.loginForm.value).subscribe(res => {
+    //   if (res === true) {
+    //     this.isLoading = false;
+    //     this.router.navigate(['home']);
+    //   }
+    // });
   }
 
 }

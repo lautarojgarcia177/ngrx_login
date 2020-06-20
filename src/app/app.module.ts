@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 // ngrx
 import { StoreModule } from '@ngrx/store';
 import { authReducer } from './store/reducers/auth.reducer';
+import { AuthEffects } from './store/effects/auth.effects';
 
 import { AppComponent } from './app.component';
 import { EffectsModule } from '@ngrx/effects';
@@ -29,7 +30,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     StoreModule.forRoot({auth: authReducer}),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AuthEffects]),
     NgbModule
   ],
   providers: [],

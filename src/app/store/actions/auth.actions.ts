@@ -1,3 +1,4 @@
+import { UserCredentials } from './../../models/user-credentials.model';
 // import { createAction } from '@ngrx/store';
 
 // export const login = createAction('[Login Page] Login');
@@ -6,13 +7,20 @@
 import { Action } from '@ngrx/store';
 
 export enum EAuthActions {
-  LOGIN = '[Login Page] Login'
+  LOGINSUCCESFUL = '[Login Page] Login Successful',
+  LOGIN = '[Login Page] Login',
 }
 
 export class Login implements Action {
   readonly type = EAuthActions.LOGIN;
 
-  constructor(public payload: {username: string, password: string}) { }
+  constructor(public payload: UserCredentials) { }
 }
 
-export type AuthActions = Login;
+export class LoginSuccessful implements Action {
+  readonly type = EAuthActions.LOGINSUCCESFUL;
+
+  constructor() {}
+}
+
+export type AuthActions = Login | LoginSuccessful;
