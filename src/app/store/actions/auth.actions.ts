@@ -8,7 +8,10 @@ import { Action } from '@ngrx/store';
 
 export enum EAuthActions {
   LOGINSUCCESFUL = '[Login Page] Login Successful',
+  LOGINFAILURE = '[Login Page] Login Failure',
   LOGIN = '[Login Page] Login',
+  LOGOUT = '[Login Page] Logout',
+  LOADINGCALLBACK = '[Login Page] Login Failure Callback'
 }
 
 export class Login implements Action {
@@ -19,8 +22,18 @@ export class Login implements Action {
 
 export class LoginSuccessful implements Action {
   readonly type = EAuthActions.LOGINSUCCESFUL;
-
-  constructor() {}
 }
 
-export type AuthActions = Login | LoginSuccessful;
+export class LoginFailure implements Action {
+  readonly type = EAuthActions.LOGINFAILURE;
+}
+
+export class Logout implements Action {
+  readonly type = EAuthActions.LOGOUT;
+}
+
+export class LoadingPageCallback implements Action {
+  readonly type = EAuthActions.LOADINGCALLBACK;
+}
+
+export type AuthActions = Login | LoginSuccessful | LoginFailure | Logout | LoadingPageCallback;

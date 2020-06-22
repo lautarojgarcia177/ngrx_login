@@ -1,3 +1,4 @@
+import { AuthActions, EAuthActions } from './../actions/auth.actions';
 // import { createReducer, on } from '@ngrx/store';
 // import { login, register } from '../actions/auth.actions';
 // import { act } from '@ngrx/effects';
@@ -21,14 +22,20 @@ export const authReducer = (state = initialAuthState, action: fromAuthActions.Au
   switch (action.type) {
 
     case fromAuthActions.EAuthActions.LOGINSUCCESFUL:
-      console.log('from reducer, Action successful');
-        return state = {
+      return {...state,
           isLoggedIn: true
         };
 
+    case fromAuthActions.EAuthActions.LOGINFAILURE:
+      return {...state,
+        isLoggedIn: false
+      }
+
     case fromAuthActions.EAuthActions.LOGIN:
-        return state = state;
-        break;
+        return state;
+
+    case fromAuthActions.EAuthActions.LOGOUT:
+        return {...state, isLoggedIn: false}
 
     default:
       return state;

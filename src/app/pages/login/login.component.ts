@@ -1,3 +1,4 @@
+import { Actions, ofType } from '@ngrx/effects';
 import { UserCredentials } from './../../models/user-credentials.model';
 import { AuthService } from '../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
@@ -6,7 +7,7 @@ import { Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { IAuthState } from 'src/app/store/states';
 import { fromAuthActions } from 'src/app/store/actions';
-import { Router } from '@angular/router';
+import { map, concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -16,30 +17,39 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   isLoading = false;
+  isLoginFailure = false;
 
   loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder, private store: Store<IAuthState>, private login: AuthService, private router: Router) {
+  notifications$;
+  loginFailure$ = this.actions.pipe(
+    ofType(fromAuthActions.EAuthActions.LOGINFAILURE)
+  )
 
+  constructor(private fb: FormBuilder,
+     private store: Store<IAuthState>,
+     private actions: Actions,
+     private authService: AuthService
+     ) {
   }
 
   ngOnInit(): void {
+    // this.loginFailure$.subscribe(() => {
+    //   this.authService.showInvalidCredentialsMessage().subscribe(res => {
+    //     console.log('Login failure from service nottsds');
+    //     this.isLoading = false;
+    //   });
+    // });
   }
 
   onSubmit() {
+    this.isLoading = true;
     const credentials: UserCredentials = this.loginForm.value;
     const action = new fromAuthActions.Login(credentials);
     this.store.dispatch(action);
-    // this.isLoading = true;
-    // this.login.checkLoginCredentials(this.loginForm.value).subscribe(res => {
-    //   if (res === true) {
-    //     this.isLoading = false;
-    //     this.router.navigate(['home']);
-    //   }
-    // });
   }
 
 }
