@@ -1,3 +1,4 @@
+import { loadingReducer } from './store/reducers/loading.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -29,8 +30,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({auth: authReducer}),
-    EffectsModule.forRoot([AuthEffects]),
+    StoreModule.forRoot({auth: authReducer, loading: loadingReducer}),
+    EffectsModule.forRoot([AuthEffects, ]),
     NgbModule
   ],
   providers: [],

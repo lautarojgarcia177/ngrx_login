@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { IAuthState } from 'src/app/store/states';
+import * as fromState from 'src/app/store/states';
 import { fromAuthActions } from 'src/app/store/actions';
 import { map, concatMap } from 'rxjs/operators';
 
@@ -17,24 +17,23 @@ import { map, concatMap } from 'rxjs/operators';
 export class LoginComponent implements OnInit {
 
   isLoading = false;
-  isLoginFailure = false;
+  isLoading$ = this.loadingStore;
 
   loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required]
   });
 
-  notifications$;
-  loginFailure$ = this.actions.pipe(
-    ofType(fromAuthActions.EAuthActions.LOGINFAILURE)
-  )
+  // loginFailure$ = this.actions.pipe(
+  //   ofType(fromAuthActions.EAuthActions.LOGINFAILURE)
+  // )
 
   constructor(private fb: FormBuilder,
-     private store: Store<IAuthState>,
+     private authStore: Store<fromState.IAuthState>,
+     private loadingStore: Store<fromState.ILoadingState>,
      private actions: Actions,
      private authService: AuthService
-     ) {
-  }
+     ) {}
 
   ngOnInit(): void {
     // this.loginFailure$.subscribe(() => {
@@ -43,13 +42,15 @@ export class LoginComponent implements OnInit {
     //     this.isLoading = false;
     //   });
     // });
+
+    this.isLoading$.subscribe(state => this.isLoading = state.isLoading);
   }
 
   onSubmit() {
     this.isLoading = true;
     const credentials: UserCredentials = this.loginForm.value;
     const action = new fromAuthActions.Login(credentials);
-    this.store.dispatch(action);
+    this.authStore.dispatch(action);
   }
 
 }

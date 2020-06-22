@@ -1,3 +1,4 @@
+import { LoadingActions } from './../actions/loading.actions';
 import { LoginFailure } from './../actions/auth.actions';
 import { Router } from '@angular/router';
 import { AuthService } from './../../services/auth.service';
@@ -5,7 +6,7 @@ import { Injectable, ErrorHandler } from '@angular/core';
 import { Actions, createEffect, ofType, Effect } from '@ngrx/effects';
 import { EMPTY, Observable, of } from 'rxjs';
 import { map, filter, mergeMap, catchError, tap, switchMap, concatMap } from 'rxjs/operators';
-import { fromAuthActions } from '../actions';
+import { fromAuthActions, fromLoadingActions } from '../actions';
 import { LoginSuccessful } from '../actions/auth.actions';
 
 @Injectable()
@@ -29,31 +30,40 @@ export class AuthEffects {
   @Effect()
   login$ = this.actions$.pipe(
       ofType<fromAuthActions.Login>(fromAuthActions.EAuthActions.LOGIN),
-      switchMap((action: fromAuthActions.Login) => {
+      map(() => new fromLoadingActions.StartLoading());
+      map((action: fromAuthActions.Login) => {
         return this.authService.checkLoginCredentials(action.payload)
           .pipe(
             map((credentialsValid: boolean) => {
               if (credentialsValid) {
-                return new fromAuthActions.LoginSuccessful();
+                new fromLoadingActions.FinishedLoading();
+                new fromAuthActions.LoginSuccessful();
               } else {
-                return new fromAuthActions.LoginFailure();
+                new fromLoadingActions.FinishedLoading();
+                new fromAuthActions.LoginFailure();
               }
             })
           )
       })
     );
 
-    @Effect({dispatch: false})
+    @Effect()
     LoginFailure$ = this.actions$.pipe(
       ofType<fromAuthActions.LoginFailure>(fromAuthActions.EAuthActions.LOGINFAILURE),
       switchMap(() => this.authService.showInvalidCredentialsMessage()),
-      map((reason) => console.log('login uncussdesful with msj from effectos'))
+      switchMap(reason => of(new fromLoadingActions.FinishedLoading()))
     );
 
   loginSuccessful$ = createEffect(() => this.actions$.pipe(
     ofType<fromAuthActions.LoginSuccessful>(fromAuthActions.EAuthActions.LOGINSUCCESFUL),
-    map(() => this.router.navigate(['home']))
-  ), {dispatch: false});
+    map(() => this.router.navigate(['home'])),
+    switchMap(() => of(new fromLoadingActions.FinishedLoading()))
+  ));
+
+    @Effect({dispatch: false})
+    logout$ = this.actions$.pipe(
+
+    );
 
   constructor(
     private actions$: Actions,

@@ -15,7 +15,7 @@ import { AuthActions, EAuthActions } from './../actions/auth.actions';
 //     return _authReducer(state, action);
 // }
 
-import { initialAuthState, IAuthState } from 'src/app/store/states';
+import { IAuthState, initialAuthState } from 'src/app/store/states';
 import { fromAuthActions } from 'src/app/store/actions';
 
 export const authReducer = (state = initialAuthState, action: fromAuthActions.AuthActions): IAuthState => {

@@ -32,8 +32,4 @@ export class Logout implements Action {
   readonly type = EAuthActions.LOGOUT;
 }
 
-export class LoadingPageCallback implements Action {
-  readonly type = EAuthActions.LOADINGCALLBACK;
-}
-
-export type AuthActions = Login | LoginSuccessful | LoginFailure | Logout | LoadingPageCallback;
+export type AuthActions = Login | LoginSuccessful | LoginFailure | Logout ;
